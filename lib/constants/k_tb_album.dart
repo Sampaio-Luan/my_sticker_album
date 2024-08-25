@@ -1,20 +1,38 @@
+import 'package:my_sticker_album/constants/k_tb_sticker.dart';
+
 const String kTableNameAlbum = "tb_albums";
 
 const String kTableAlbumColumnId = "id";
 const String kTableAlbumColumnNome = "nome";
 const String kTableAlbumColumnDescricao = "descricao";
-const String kTableAlbumColumnUrl = "url";
+const String kTableAlbumColumnCapa = "capa";
 const String kTableAlbumColumnPosicoes = "posicoes";
 const String kTableAlbumColumnCriacao = "criacao";
+const String kTableAlbumColumnTemaCor = "tema";
 
+const String kAlbumQuantidadeFigurinhas = "quantidade_figurinhas";
 
 const String kCreateTableAlbum = """
 CREATE TABLE $kTableNameAlbum (
   $kTableAlbumColumnId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   $kTableAlbumColumnNome TEXT NOT NULL,
   $kTableAlbumColumnDescricao TEXT NOT NULL,
-  $kTableAlbumColumnUrl TEXT NOT NULL,
+  $kTableAlbumColumnCapa TEXT NOT NULL,
   $kTableAlbumColumnPosicoes INTEGER NOT NULL,
-  $kTableAlbumColumnCriacao TEXT NOT NULL
+  $kTableAlbumColumnCriacao TEXT NOT NULL,
+  $kTableAlbumColumnTemaCor INTEGER NOT NULL
 );
 """;
+
+const String kQueryAlbum = """
+  SELECT
+      a.*,
+      COUNT(s.id) AS quantidade_stickers
+  FROM
+      $kTableNameAlbum a
+  LEFT JOIN
+      $kTableNameSticker s ON a.$kTableAlbumColumnId = s.$kTableStickerColumnIdAlbum
+  GROUP BY
+      a.nome;
+
+  """;

@@ -5,7 +5,9 @@ import 'themes/theme.dart';
 import 'utils/util.dart';
 
 class MeuApp extends StatelessWidget {
+  
   const MeuApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,4 +25,12 @@ class MeuApp extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
+
 

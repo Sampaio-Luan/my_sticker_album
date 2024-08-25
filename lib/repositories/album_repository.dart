@@ -8,7 +8,7 @@ import '../models/album.module.dart';
 
 class AlbumRepository extends ChangeNotifier {
   final List<AlbumModel> _albums = [];
-  get albums => _albums;
+  get getAlbums => _albums;
 
   late Database db;
 

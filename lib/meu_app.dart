@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/home_screen.dart';
+import 'screens/album_screen.dart';
 import 'themes/theme.dart';
 import 'utils/util.dart';
 
@@ -20,7 +20,7 @@ class MeuApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: brightness == Brightness.light ? theme.light() : theme.dark(),
-      home: const HomePage(),
+      home: const AlbumScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

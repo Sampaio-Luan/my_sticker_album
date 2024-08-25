@@ -6,11 +6,30 @@ import '../constants/k_tb_sticker.dart';
 import '../data/data_base.dart';
 import '../models/sticker.module.dart';
 
-class AlbumRepository extends ChangeNotifier {
+class StickerRepository extends ChangeNotifier {
   final List<StickerModel> _stickers = [];
-  get stickers => _stickers;
+  get getStickers => _stickers;
 
+   List<int> posicoes = [];
   late Database db;
+
+  StickerModel sticker = StickerModel(
+    id: 1,
+    idAlbum: 1,
+    imagem: '',
+    posicao: 3,
+    quantidade: 1,
+    nome: '',
+    descricao: '',
+  );
+
+  StickerRepository() {
+    _stickers.add(sticker);
+    posicoes = _stickers.map((e) => e.posicao).toList();
+    if (_stickers.isEmpty) {
+      recuperar(1);
+    }
+  }
 
   recuperar(int idAlbum) async {
     db = await Banco.instancia.database;

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import '../models/album.module.dart';
 import '../repositories/album_repository.dart';
 import '../utils/capturar_imagem.dart';
 import '../utils/opcoes_cores.dart';

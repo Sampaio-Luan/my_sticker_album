@@ -9,14 +9,14 @@ import '../models/sticker.module.dart';
 class StickerRepository extends ChangeNotifier {
   final List<StickerModel> _stickers = [];
   get getStickers => _stickers;
-
-   List<int> posicoes = [];
+  List<StickerModel> stickersInterface = [];
   late Database db;
 
   StickerModel sticker = StickerModel(
     id: 1,
     idAlbum: 1,
-    imagem: '',
+    imagem:
+        'https://s2-g1.glbimg.com/R9MLvKO92PP_78wMTCvDKozTh8A=/0x0:1518x916/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2019/7/L/AhD3O2Rguo4YQNpBTkEQ/grifi.jpg',
     posicao: 3,
     quantidade: 1,
     nome: '',
@@ -24,17 +24,40 @@ class StickerRepository extends ChangeNotifier {
   );
 
   StickerRepository() {
-    _stickers.add(sticker);
-    posicoes = _stickers.map((e) => e.posicao).toList();
+    //_stickers.add(sticker);
+
     if (_stickers.isEmpty) {
-      recuperar(1);
+      prenncher();
+      //recuperar(1);
     }
+  }
+
+  prenncher() {
+    for (int i = 1; i < 20; i++) {
+      if (i == 3) {
+        _stickers.add(sticker);
+      } else {
+        _stickers.add(
+          StickerModel(
+            id: i,
+            idAlbum: 1,
+            imagem: '',
+            posicao: i,
+            quantidade: 0,
+            nome: '',
+            descricao: '',
+          ),
+        );
+      }
+    }
+    stickersInterface.addAll(_stickers);
   }
 
   recuperar(int idAlbum) async {
     db = await Banco.instancia.database;
 
     _stickers.clear();
+
     notifyListeners();
 
     final List<Map<String, dynamic>> stickersMap = await db.query(
@@ -45,7 +68,7 @@ class StickerRepository extends ChangeNotifier {
     for (int i = 0; i < stickersMap.length; i++) {
       _stickers.add(StickerModel.fromMap(stickersMap[i]));
     }
-
+    stickersInterface = _stickers;
     debugPrint("🏦🃏RPS recuperar() stickers: ${_stickers.length}");
 
     notifyListeners();
@@ -105,5 +128,34 @@ class StickerRepository extends ChangeNotifier {
     debugPrint("🏦🃏RPS deletar() id: ${sticker.nome}");
 
     notifyListeners();
+  }
+
+  filtrar(String filtro) {
+    stickersInterface.clear();
+    notifyListeners();
+
+    switch (filtro) {
+      case 'Repetidas':
+        for (var element in _stickers) {
+          if (element.quantidade > 1) {
+            stickersInterface.add(element);
+          }
+        }
+        break;
+      case 'Faltantes':
+        for (var element in _stickers) {
+          if (element.quantidade == 0) {
+            stickersInterface.add(element);
+          }
+        }
+        break;
+      default:
+        stickersInterface.addAll(_stickers);
+        break;
+    }
+
+    notifyListeners();
+    debugPrint("🏦🃏RPS filtrar() filtro: ${stickersInterface.length}");
+    debugPrint("🏦🃏RPS filtrar() filtro: $filtro");
   }
 }

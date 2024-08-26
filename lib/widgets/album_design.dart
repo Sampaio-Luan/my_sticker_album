@@ -19,21 +19,42 @@ class AlbumDesign extends StatelessWidget {
           border: Border(
             top: BorderSide(width: 0.1, color: cor.cores[album.temaCor]),
             bottom: BorderSide(width: 0.1, color: cor.cores[album.temaCor]),
-            left: BorderSide(width: 20, color: cor.cores[album.temaCor]),
+            left: BorderSide(width: 15, color: cor.cores[album.temaCor]),
             right: BorderSide(width: 0.1, color: cor.cores[album.temaCor]),
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Row(
           children: [
-            Text(album.nome),
-            Text(album.criacao),
-            Text(album.temaCor.toString()),
-            Text(album.id.toString()),
-            Text(album.capa),
-            Text(album.descricao),
-            Text(album.posicoes.toString()),
-            Text(album.quantidadeFigurinhas.toString()),
+            Expanded(
+              child: Container(
+                color: cor.cores[album.temaCor],
+                child: album.capa.isEmpty
+                    ? const Icon(Icons.image)
+                    : Image.network(album.capa, fit: BoxFit.cover),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(album.nome),
+                    Text(album.criacao),
+                    Text(album.temaCor.toString()),
+                    Text(album.id.toString()),
+                    Text(
+                      album.capa,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(album.descricao),
+                    Text(album.posicoes.toString()),
+                    Text(album.quantidadeFigurinhas.toString()),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

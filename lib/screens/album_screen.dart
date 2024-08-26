@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../preferencias.dart';
 import '../repositories/album_repository.dart';
 import '../utils/capturar_imagem.dart';
 import '../utils/opcoes_cores.dart';
@@ -16,37 +18,55 @@ class AlbumScreen extends StatefulWidget {
 
 class _AlbumScreenState extends State<AlbumScreen> {
   final teste = CapturarImagem();
-  final b =  OpcoesCores();
+  final b = OpcoesCores();
 
   @override
   Widget build(BuildContext context) {
+    final preferencias = context.watch<Preferencias>();
+    final albumR = context.watch<AlbumRepository>();
     return Scaffold(
       appBar: AppBar(
         //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         backgroundColor: Colors.transparent,
         title: const Text('Meus Álbuns'),
-        //centerTitle: true,
+        centerTitle: true,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              preferencias.getTema
+                  ? PhosphorIconsRegular.sun
+                  : PhosphorIconsRegular.moon,
+            ),
+            onPressed: () {
+              preferencias.setTema(preferencias.getTema ? false : true);
+            },
+          ),
+        ],
       ),
       body: Consumer<AlbumRepository>(builder: (context, albumR, _) {
-        return albumR.getAlbums.isEmpty ? const Center(
-          child: Text('Nenhum álbum encontrado'),
-        ) : GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 5,
-          ),
-          itemCount: albumR.getAlbums.length,
-          itemBuilder: (context, index) {
-            return AlbumDesign(album: albumR.getAlbums[index]);
-          },
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-        );
+        return albumR.getAlbums.isEmpty
+            ? const Center(
+                child: Text('Nenhum álbum encontrado'),
+              )
+            : GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 5,
+                  childAspectRatio: 2,
+                ),
+                itemCount: albumR.getAlbums.length,
+                itemBuilder: (context, index) {
+                  return AlbumDesign(album: albumR.getAlbums[index]);
+                },
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              );
       }),
       floatingActionButton: FloatingActionButton(
-        onPressed: ()  {
-          b.opcoesCores(context);
+        onPressed: () {
+          b.opcoesCores(context, albumR);
           //teste.opcoesCaptura(context);
         },
         //null,

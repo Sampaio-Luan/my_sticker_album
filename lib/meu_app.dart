@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import 'preferencias.dart';
 import 'screens/album_screen.dart';
 import 'themes/theme.dart';
 import 'utils/util.dart';
 
 class MeuApp extends StatelessWidget {
-  
   const MeuApp({super.key});
-
 
   @override
   Widget build(BuildContext context) {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
+    final preferencias = context.watch<Preferencias>();
 
     TextTheme textTheme =
         createTextTheme(context, "ABeeZee", "Noto Sans Javanese");
@@ -19,18 +21,9 @@ class MeuApp extends StatelessWidget {
     MaterialTheme theme = MaterialTheme(textTheme);
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: brightness == Brightness.light ? theme.light() : theme.dark(),
+      theme: preferencias.getTema ? theme.dark() : theme.light(),
       home: const AlbumScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
-
-
-
-
-
-
-
-
-

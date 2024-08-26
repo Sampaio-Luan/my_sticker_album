@@ -6,8 +6,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+import 'lista_de_cores.dart';
+
 class CapturarImagem {
   File? imagem;
+  final corD = CoresDeDestaque();
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -35,75 +38,83 @@ class CapturarImagem {
     }
   }
 
- void opcoesCaptura(BuildContext context) {
+  void opcoesCaptura(BuildContext context, int cor) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
         return Padding(
           padding: const EdgeInsets.all(16),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Center(
-                  child: Icon(
-                    PhosphorIconsRegular.image,
-                    color: Colors.grey[500],
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.06,
+            child: Row(children: [
+              Expanded(
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: corD.cores[cor].withAlpha(30),
+                    child: Center(
+                      child: Icon(
+                        PhosphorIconsRegular.image,
+                        color: corD.cores[cor],
+                      ),
+                    ),
                   ),
+                  title: Text(
+                    'Galeria',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    // Buscar imagem da galeria
+                    pick(ImageSource.gallery);
+                  },
                 ),
               ),
-              title: Text(
-                'Galeria',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                // Buscar imagem da galeria
-                pick(ImageSource.gallery);
-              },
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Center(
-                  child: Icon(
-                    PhosphorIconsRegular.camera,
-                    color: Colors.grey[500],
+              const VerticalDivider(),
+              Expanded(
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: corD.cores[cor].withAlpha(30),
+                    child: Center(
+                      child: Icon(
+                        PhosphorIconsRegular.camera,
+                        color: corD.cores[cor],
+                      ),
+                    ),
                   ),
+                  title: Text(
+                    'Câmera',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    // Fazer foto da câmera
+                    pick(ImageSource.camera);
+                  },
                 ),
               ),
-              title: Text(
-                'Câmera',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                // Fazer foto da câmera
-                pick(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Center(
-                  child: Icon(
-                    PhosphorIconsRegular.trash,
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ),
-              title: Text(
-                'Remover',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                // Tornar a foto null
-
-                imageFile = null;
-              },
-            ),
-          ]),
+              // ListTile(
+              //   leading: CircleAvatar(
+              //     backgroundColor: Colors.grey[200],
+              //     child: Center(
+              //       child: Icon(
+              //         PhosphorIconsRegular.trash,
+              //         color: Colors.grey[500],
+              //       ),
+              //     ),
+              //   ),
+              //   title: Text(
+              //     'Remover',
+              //     style: Theme.of(context).textTheme.bodyLarge,
+              //   ),
+              //   onTap: () {
+              //     Navigator.of(context).pop();
+              //     // Tornar a foto null
+            
+              //     imageFile = null;
+              //   },
+              // ),
+            ]),
+          ),
         );
       },
     );

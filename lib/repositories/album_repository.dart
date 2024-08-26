@@ -16,7 +16,7 @@ class AlbumRepository extends ChangeNotifier {
     id: 1,
     nome: 'Album 1',
     descricao: 'Descrição do album 1',
-    capa: 'https://picsum.photos/200/300',
+    capa: 'https://nerdtatuado.com.br/wp-content/uploads/2022/05/handler-2.png',
     posicoes: 20,
     criacao: '2022-01-01',
     temaCor: 1,
@@ -106,6 +106,11 @@ class AlbumRepository extends ChangeNotifier {
 
     debugPrint("🥱👽RPA excluir() id: ${album.nome}");
 
+    notifyListeners();
+  }
+
+  mudarTema(int cor){
+    album1.temaCor = cor;
     notifyListeners();
   }
 }

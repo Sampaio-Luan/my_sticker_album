@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../repositories/album_repository.dart';
 
 import 'lista_de_cores.dart';
 
 class OpcoesCores {
   CoresDeDestaque cor = CoresDeDestaque();
 
-  opcoesCores(context) async {
+  opcoesCores(context, AlbumRepository album) async {
+    
     showDialog(
         context: context,
         builder: (builder) {
+        
           return AlertDialog(
             title: const Text(
               'Selecione uma cor',
@@ -28,6 +33,7 @@ class OpcoesCores {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
+                      album.mudarTema(index);
                       Navigator.pop(context, cor.cores[index]);
                     },
                     child: Container(

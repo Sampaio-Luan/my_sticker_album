@@ -25,15 +25,13 @@ class AlbumDesign extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Expanded(
-              child: Container(
-                color: cor.cores[album.temaCor],
-                child: album.capa.isEmpty
-                    ? const Icon(Icons.image)
-                    : Image.network(album.capa, fit: BoxFit.cover),
-              ),
+            SizedBox(
+              child: album.capa.isEmpty
+                  ? const Icon(Icons.image)
+                  : Image.network(album.capa, fit: BoxFit.cover),
             ),
             Expanded(
+              flex: 2,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -43,14 +41,14 @@ class AlbumDesign extends StatelessWidget {
                     Text(album.nome),
                     Text(album.criacao),
                     Text(album.temaCor.toString()),
-                    Text(album.id.toString()),
+                    //Text(album.id.toString()),
                     Text(
                       album.capa,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(album.descricao),
                     Text(album.posicoes.toString()),
-                    Text(album.quantidadeFigurinhas.toString()),
+                    //Text(album.quantidadeFigurinhas.toString()),
                   ],
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../formularios/album_form.dart';
 import '../preferencias.dart';
 import '../repositories/album_repository.dart';
 import '../utils/capturar_imagem.dart';
@@ -18,7 +19,8 @@ class AlbumScreen extends StatefulWidget {
 
 class _AlbumScreenState extends State<AlbumScreen> {
   final teste = CapturarImagem();
-  final b = OpcoesCores();
+
+  bool isBottomSheet = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +67,19 @@ class _AlbumScreenState extends State<AlbumScreen> {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 );
         }),
+        bottomSheet: albumR.isForm ?  AlbumForm(album: null, albumR: albumR) : null,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            b.opcoesCores(context, albumR);
+            // showModalBottomSheet(
+            //     context: context,
+            //     builder: (context) =>
+            //         const AlbumForm(album: null));
+            albumR.setForm(true);
+            //b.opcoesCores(context, albumR);
             //teste.opcoesCaptura(context);
           },
           //null,
-      
+
           //   teste.localPath.then((value) => debugPrint(value));
           // },
           tooltip: 'Increment',

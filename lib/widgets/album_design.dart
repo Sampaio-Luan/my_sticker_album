@@ -35,10 +35,18 @@ class AlbumDesign extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(album.nome),
+                    Text(
+                      album.nome,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: cor.cores[album.temaCor].withAlpha(180),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      
+                    ),
                     Text(album.criacao),
                     Text(album.temaCor.toString()),
                     //Text(album.id.toString()),

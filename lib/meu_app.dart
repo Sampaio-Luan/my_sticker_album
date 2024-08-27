@@ -12,7 +12,7 @@ class MeuApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final brightness = View.of(context).platformDispatcher.platformBrightness;
+    
     final preferencias = context.watch<Preferencias>();
 
     TextTheme textTheme =

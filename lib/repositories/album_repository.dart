@@ -10,6 +10,13 @@ class AlbumRepository extends ChangeNotifier {
   final List<AlbumModel> _albums = [];
   get getAlbums => _albums;
 
+  bool isForm = false;
+
+  void setForm(bool value) {
+    isForm = value;
+    notifyListeners();
+  }
+
   late Database db;
 
   AlbumModel album1 = AlbumModel(

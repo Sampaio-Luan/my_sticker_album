@@ -34,8 +34,21 @@ class CapturarImagem {
     final pickedFile = await imagePicker.pickImage(source: source);
 
     if (pickedFile != null) {
+      //_saveImageToDisk(pickedFile.path);
+      copiarImagem(pickedFile.path);
+      debugPrint('Enviou a imagem para o copia');
       imageFile = File(pickedFile.path);
     }
+  }
+
+  _saveImageToDisk(String imageP) async {
+    final directory = await getApplicationDocumentsDirectory();
+    debugPrint(directory.path);
+    final imagePath =
+        '${directory.path}/$imageP'; // Caminho completo para a imagem
+    debugPrint(imagePath);
+    // Agora você pode salvar a imagem no caminho especificado
+    // (por exemplo, usando o pacote http para baixar a imagem ou copiando-a de outro local).
   }
 
   void opcoesCaptura(BuildContext context, int cor) {
@@ -109,7 +122,7 @@ class CapturarImagem {
               //   onTap: () {
               //     Navigator.of(context).pop();
               //     // Tornar a foto null
-            
+
               //     imageFile = null;
               //   },
               // ),
@@ -118,5 +131,28 @@ class CapturarImagem {
         );
       },
     );
+  }
+
+  Future<void> copiarImagem(String diretorioOrigem) async {
+    debugPrint('Entrou no copia');
+    // Obter o caminho do diretório de origem
+    //final diretorioOrigem = await getApplicationDocumentsDirectory();
+    final caminhoOrigem = diretorioOrigem;
+    debugPrint('pegou o caminho do copia');
+
+    // Obter o caminho do diretório de destino
+    final diretorioDestino = await getApplicationDocumentsDirectory();
+    final caminhoDestino = '${diretorioDestino.path}/imagem.png';
+    debugPrint('pegou o destino do copia');
+    // Ler a imagem de origem
+    final arquivoOrigem = File(caminhoOrigem);
+    final bytes = await arquivoOrigem.readAsBytes();
+    debugPrint('leu a imagem do copia');
+    // Criar a imagem de destino e escrever os bytes
+    final arquivoDestino = File(caminhoDestino);
+    await arquivoDestino.writeAsBytes(bytes);
+    debugPrint('escreveu a imagem do copia');
+
+    debugPrint(arquivoDestino.path);
   }
 }

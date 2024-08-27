@@ -55,6 +55,7 @@ class _StickerDesignState extends State<StickerDesign> {
   }
 
   cardComImagem(StickerModel sticker) {
+    final preferencia = Provider.of<Preferencias>(context, listen: false);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -85,10 +86,11 @@ class _StickerDesignState extends State<StickerDesign> {
                   right: 5,
                   child: Text(
                     '${widget.sticker.posicao}',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: preferencia.getGradeView == 2 ? 23 : 17,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ]),
@@ -168,13 +170,12 @@ class _StickerDesignState extends State<StickerDesign> {
             ),
           ),
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 2.0, horizontal: 5.0),
+            padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 5.0),
             child: Stack(
               fit: StackFit.passthrough,
               children: [
                 Icon(
-                  PhosphorIconsBold.camera,
+                  PhosphorIconsRegular.camera,
                   color: cor.cores[corTema].withAlpha(60),
                   size: preferencia.getGradeView == 2 ? 90 : 50,
                 ),
@@ -185,7 +186,7 @@ class _StickerDesignState extends State<StickerDesign> {
                     '${widget.sticker.posicao}',
                     style: TextStyle(
                       color: cor.cores[corTema].withAlpha(60),
-                      fontSize:  preferencia.getGradeView == 2 ? 40 : 30,
+                      fontSize: preferencia.getGradeView == 2 ? 30 : 20,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

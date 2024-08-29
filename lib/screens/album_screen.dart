@@ -67,16 +67,19 @@ class _AlbumScreenState extends State<AlbumScreen> {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 );
         }),
-        bottomSheet: albumR.isForm ?  AlbumForm(album: null, albumR: albumR) : null,
+       // bottomSheet: albumR.isForm ?  AlbumForm(album: null, albumR: albumR) : null,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             // showModalBottomSheet(
             //     context: context,
             //     builder: (context) =>
             //         const AlbumForm(album: null));
-            albumR.setForm(true);
+            //albumR.setForm(true);
             //b.opcoesCores(context, albumR);
-            //teste.opcoesCaptura(context);
+            //teste.opcoesCaptura(context, 1);
+            teste.deletar();
+            //teste.checkFilePermissions();
+            //teste.requestPermissions();
           },
           //null,
 

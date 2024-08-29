@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import 'lista_de_cores.dart';
@@ -11,44 +14,113 @@ import 'lista_de_cores.dart';
 class CapturarImagem {
   File? imagem;
   final corD = CoresDeDestaque();
-
+  final imagePicker = ImagePicker();
+  File? imageFile;
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
     return directory.path;
   }
 
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/counter.txt');
-  }
-
-  Future<String> capturarImagem() async {
-    return "";
-  }
-
-  final imagePicker = ImagePicker();
-  File? imageFile;
-
   pick(ImageSource source) async {
     final pickedFile = await imagePicker.pickImage(source: source);
+    //await requestPermissions();
+    //await checkFilePermissions();
+    //debugPrint('caminho da imagem: ${pickedFile?.path}');
+    //debugPrint('diretorio padrao: ${await _localPath}');
 
     if (pickedFile != null) {
-      //_saveImageToDisk(pickedFile.path);
-      copiarImagem(pickedFile.path);
-      debugPrint('Enviou a imagem para o copia');
       imageFile = File(pickedFile.path);
+      // await FileSaver.instance
+      //     .saveFile(
+      //       name: 'image1',
+      //       ext: 'png',
+      //       mimeType: MimeType.png,
+      //       filePath: imageFile!.path,
+      //       file: imageFile!,
+      //     )
+      //     .then((value) => debugPrint(value));
+      // var status = await Permission.storage.status;
+      // if (!status.isGranted) {
+      //   await Permission.storage.request();
+      //   //saveImage(pickedFile);
+
+      // }
+      saveImage(imageFile!.readAsBytesSync());
     }
   }
 
-  _saveImageToDisk(String imageP) async {
-    final directory = await getApplicationDocumentsDirectory();
-    debugPrint(directory.path);
-    final imagePath =
-        '${directory.path}/$imageP'; // Caminho completo para a imagem
-    debugPrint(imagePath);
-    // Agora você pode salvar a imagem no caminho especificado
-    // (por exemplo, usando o pacote http para baixar a imagem ou copiando-a de outro local).
+  teste(File imagemEscolhida) async {
+    await requestPermissions();
+    Directory? diretorio = await getExternalStorageDirectory();
+    //await checkFilePermissions();
+    debugPrint('caminho da imagem: ${imagemEscolhida.path}');
+    if (diretorio != null) {
+      debugPrint(diretorio.path);
+      File fileteste = File(join(diretorio.path, imagemEscolhida.path));
+      await fileteste.writeAsBytes(imagemEscolhida.readAsBytesSync());
+      debugPrint(fileteste.path);
+    }
+  }
+
+  // Future<void> saveImage(XFile image) async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final String path = '${directory.path}/${image.name}';
+  //   final File newImage = File(path);
+  //   await newImage.writeAsBytes(await image.readAsBytes());
+  // }
+
+  Future<String> saveImage(Uint8List imageBytes) async {
+    final directory = await getExternalStorageDirectory();
+    final imagePath = '${directory!.path}/images';
+    final imageFile = File('$imagePath/image.jpg');
+
+    await Directory(imagePath).create(recursive: true);
+    await imageFile.writeAsBytes(imageBytes);
+    debugPrint('DEu certo: ${imageFile.path}');
+    return imageFile.path;
+  }
+
+  deletar() async {
+    Directory? diretorio = await getExternalStorageDirectory();
+    if (diretorio != null) {
+      debugPrint(diretorio.path);
+      File fileteste = File(join(diretorio.path, 'images','image.jpg'));
+      await fileteste.delete();
+      debugPrint(fileteste.path);
+    }
+  }
+
+  requestPermissions() async {
+    // Solicitar permissão para a câmera
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      await Permission.camera.request();
+      debugPrint(status.toString());
+    }
+
+    // Solicitar permissão para a localização
+    status = await Permission.location.status;
+    if (!status.isGranted) {
+      await Permission.location.request();
+      debugPrint(status.toString());
+    }
+
+    // Solicitar permissão para o armazenamento
+    status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+      debugPrint(status.toString());
+    }
+
+    status = await Permission.manageExternalStorage.status;
+    if (!status.isGranted) {
+      await Permission.manageExternalStorage.request();
+    }
+    status = await Permission.mediaLibrary.status;
+    if (!status.isGranted) {
+      await Permission.mediaLibrary.request();
+    }
   }
 
   void opcoesCaptura(BuildContext context, int cor) {
@@ -131,28 +203,5 @@ class CapturarImagem {
         );
       },
     );
-  }
-
-  Future<void> copiarImagem(String diretorioOrigem) async {
-    debugPrint('Entrou no copia');
-    // Obter o caminho do diretório de origem
-    //final diretorioOrigem = await getApplicationDocumentsDirectory();
-    final caminhoOrigem = diretorioOrigem;
-    debugPrint('pegou o caminho do copia');
-
-    // Obter o caminho do diretório de destino
-    final diretorioDestino = await getApplicationDocumentsDirectory();
-    final caminhoDestino = '${diretorioDestino.path}/imagem.png';
-    debugPrint('pegou o destino do copia');
-    // Ler a imagem de origem
-    final arquivoOrigem = File(caminhoOrigem);
-    final bytes = await arquivoOrigem.readAsBytes();
-    debugPrint('leu a imagem do copia');
-    // Criar a imagem de destino e escrever os bytes
-    final arquivoDestino = File(caminhoDestino);
-    await arquivoDestino.writeAsBytes(bytes);
-    debugPrint('escreveu a imagem do copia');
-
-    debugPrint(arquivoDestino.path);
   }
 }

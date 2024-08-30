@@ -53,7 +53,9 @@ class _AlbumFormState extends State<AlbumForm> {
         builder: (BuildContext context) {
           return Form(
             key: _formAlbumKey,
-            autovalidateMode: autoValidar ? AutovalidateMode.always : AutovalidateMode.disabled,
+            autovalidateMode: autoValidar
+                ? AutovalidateMode.always
+                : AutovalidateMode.disabled,
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.only(top: 10.0),
@@ -106,7 +108,7 @@ class _AlbumFormState extends State<AlbumForm> {
                     ),
                     const SizedBox(height: 10),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal:  8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: OpcoesCores(
                         qtdElementLinha: 10,
                         controle: _corController,
@@ -117,82 +119,83 @@ class _AlbumFormState extends State<AlbumForm> {
                       children: [
                         Expanded(
                           child: ListTile(
-                            onTap: () {
-                              _corController.clear();
-                              _qtdPosicoesController.clear();
-                              _descricaoController.clear();
-                              _tituloController.clear();
-
-                              widget.albumR.setForm(false);
-                            },
-                            title: const Text(
-                              'Cancelar',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            tileColor: Colors.red.shade300
-                            // Colors.red.withAlpha(170),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            onTap: () {
-                              if (_formAlbumKey.currentState!.validate()) {
-                                if (widget.album == null) {
-                                  AlbumModel a1 = AlbumModel(
-                                    nome: _tituloController.text,
-                                    posicoes:
-                                        int.parse(_qtdPosicoesController.text),
-                                    descricao: _descricaoController.text.isEmpty
-                                        ? ''
-                                        : _descricaoController.text,
-                                    temaCor: int.parse(_corController.text),
-                                    id: 0,
-                                    capa: '',
-                                    criacao: DateFormat.yMd('pt_BR')
-                                        .format(DateTime.now())
-                                        .toString(),
-                                    quantidadeFigurinhas: 0,
-                                  );
-                                  debugPrint('${a1.toMap()}');
-                                  //widget.albumR.criar(a1);
-                                } else {
-                                  _album.nome = _tituloController.text;
-                                  _album.descricao =
-                                      _descricaoController.text.isEmpty
-                                          ? ''
-                                          : _descricaoController.text;
-                                  _album.temaCor =
-                                      int.parse(_corController.text);
-                                  _album.posicoes =
-                                      int.parse(_qtdPosicoesController.text);
-                                  widget.albumR.atualizar(_album);
-                                }
-                                _corController.clear();
+                              onTap: () {
                                 _qtdPosicoesController.clear();
                                 _descricaoController.clear();
                                 _tituloController.clear();
-                                debugPrint('${_album.toMap()}');
-                                //widget.albumR.setForm(false);
-                              }
-                              setState(() {
-                                autoValidar = true;
-                              });
-                            },
-                            title: Text(
-                              widget.album == null ? 'Adicionar' : 'Salvar',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            tileColor:  Colors.green.shade300
-                            // Colors.green.withAlpha(170),
-                          ),
+
+                                widget.albumR.setForm(false);
+                              },
+                              title: const Text(
+                                'Cancelar',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              tileColor: Colors.red.shade300
+                              // Colors.red.withAlpha(170),
+                              ),
+                        ),
+                        Expanded(
+                          child: ListTile(
+                              onTap: () {
+                                if (_formAlbumKey.currentState!.validate()) {
+                                  if (widget.album == null) {
+                                    AlbumModel a1 = AlbumModel(
+                                      nome: _tituloController.text,
+                                      posicoes: int.parse(
+                                          _qtdPosicoesController.text),
+                                      descricao:
+                                          _descricaoController.text.isEmpty
+                                              ? ''
+                                              : _descricaoController.text,
+                                      temaCor: int.parse(_corController.text),
+                                      id: 0,
+                                      capa: '',
+                                      criacao: DateFormat.yMd('pt_BR')
+                                          .format(DateTime.now())
+                                          .toString(),
+                                      quantidadeFigurinhas: 0,
+                                    );
+                                    debugPrint('${a1.toMap()}');
+                                    widget.albumR.criar(a1);
+                                    widget.albumR.setForm(false);
+                                  } else {
+                                    _album.nome = _tituloController.text;
+                                    _album.descricao =
+                                        _descricaoController.text.isEmpty
+                                            ? ''
+                                            : _descricaoController.text;
+                                    _album.temaCor =
+                                        int.parse(_corController.text);
+                                    _album.posicoes =
+                                        int.parse(_qtdPosicoesController.text);
+                                    widget.albumR.atualizar(_album);
+                                  }
+
+                                  _qtdPosicoesController.clear();
+                                  _descricaoController.clear();
+                                  _tituloController.clear();
+                                  debugPrint('${_album.toMap()}');
+                                  widget.albumR.setForm(false);
+                                }
+                                setState(() {
+                                  autoValidar = true;
+                                });
+                              },
+                              title: Text(
+                                widget.album == null ? 'Adicionar' : 'Salvar',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              tileColor: Colors.green.shade300
+                              // Colors.green.withAlpha(170),
+                              ),
                         ),
                       ],
                     ),

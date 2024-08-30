@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:sqflite/sqflite.dart';
 
+import 'package:my_sticker_album/constants/k_tb_sticker.dart';
+
 import '../constants/k_tb_album.dart';
 import '../data/data_base.dart';
 import '../models/album.module.dart';
+import '../models/sticker.module.dart';
 
 class AlbumRepository extends ChangeNotifier {
   final List<AlbumModel> _albums = [];
@@ -19,21 +22,19 @@ class AlbumRepository extends ChangeNotifier {
 
   late Database db;
 
-  AlbumModel album1 = AlbumModel(
-    id: 1,
-    nome: 'Album 1',
-    descricao: 'Descrição do album 1',
-    capa: 'https://nerdtatuado.com.br/wp-content/uploads/2022/05/handler-2.png',
-    posicoes: 20,
-    criacao: '2022-01-01',
-    temaCor: 1,
-    quantidadeFigurinhas: 10,
-  );
-
- 
+  // AlbumModel album1 = AlbumModel(
+  //   id: 1,
+  //   nome: 'Album 1',
+  //   descricao: 'Descrição do album 1',
+  //   capa: 'https://nerdtatuado.com.br/wp-content/uploads/2022/05/handler-2.png',
+  //   posicoes: 20,
+  //   criacao: '2022-01-01',
+  //   temaCor: 1,
+  //   quantidadeFigurinhas: 10,
+  // );
 
   AlbumRepository() {
-     _albums.add(album1);
+    
     if (_albums.isEmpty) {
       recuperar();
     }
@@ -46,8 +47,7 @@ class AlbumRepository extends ChangeNotifier {
 
     notifyListeners();
 
-    final List<Map<String, dynamic>> albumsMap =
-        await db.rawQuery(kQueryAlbum);
+    final List<Map<String, dynamic>> albumsMap = await db.rawQuery(kQueryAlbum);
 
     for (int i = 0; i < albumsMap.length; i++) {
       _albums.add(AlbumModel.fromMap(albumsMap[i]));
@@ -67,6 +67,28 @@ class AlbumRepository extends ChangeNotifier {
       album.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    List<StickerModel> stickers = [];
+
+    for (int i = 0; i < album.posicoes; i++) {
+      stickers.add(StickerModel(
+        id: 0,
+        idAlbum: id,
+        imagem: '',
+        posicao: i + 1,
+        quantidade: 0,
+        nome: '',
+        descricao: '',
+      ));
+    }
+    for (int i = 0; i < album.posicoes; i++) {
+      await db.insert(
+      kTableNameSticker,
+      stickers[i].toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    }
+
+    
 
     album.id = id;
     _albums.add(album);
@@ -75,7 +97,6 @@ class AlbumRepository extends ChangeNotifier {
 
     notifyListeners();
   }
-
 
   atualizar(AlbumModel album) async {
     db = await Banco.instancia.database;
@@ -99,11 +120,10 @@ class AlbumRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-
   deletar(AlbumModel album) async {
     db = await Banco.instancia.database;
 
-    await db.delete(  
+    await db.delete(
       kTableNameAlbum,
       where: '$kTableAlbumColumnId = ?',
       whereArgs: [album.id],
@@ -116,8 +136,8 @@ class AlbumRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  mudarTema(int cor){
-    album1.temaCor = cor;
-    notifyListeners();
-  }
+  // mudarTema(int cor) {
+  //   album1.temaCor = cor;
+  //   notifyListeners();
+  // }
 }

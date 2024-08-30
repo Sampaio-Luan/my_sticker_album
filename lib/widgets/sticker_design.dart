@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -6,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../models/album.module.dart';
 import '../models/sticker.module.dart';
 import '../preferencias.dart';
+import '../repositories/sticker_repository.dart';
 import '../screens/visualizar_imagem.dart';
 import '../utils/capturar_imagem.dart';
 import '../utils/lista_de_cores.dart';
@@ -43,26 +46,16 @@ class _StickerDesignState extends State<StickerDesign> {
         : cardComImagem(widget.sticker);
   }
 
-  ButtonStyle getButtonStyle(context) {
-    return ButtonStyle(
-      backgroundColor: WidgetStateProperty.all(cor.cores[widget.album.temaCor]),
-      foregroundColor:
-          WidgetStateProperty.all(Theme.of(context).colorScheme.onSurface),
-      shape: WidgetStateProperty.all(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-      elevation: WidgetStateProperty.all(0),
-    );
-  }
-
   cardComImagem(StickerModel sticker) {
     final preferencia = Provider.of<Preferencias>(context, listen: false);
+    final stickerR = Provider.of<StickerRepository>(context, listen: true);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           width: 0.5,
-          color: cor.cores[corTema],
+          color: cor.cores[corTema]['corDestaque']!,
         ),
       ),
       child: Column(
@@ -76,8 +69,10 @@ class _StickerDesignState extends State<StickerDesign> {
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10)),
-                  child: Image.network(
-                    widget.sticker.imagem,
+                  child: Image.file(
+                    File(
+                      widget.sticker.imagem,
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -112,14 +107,20 @@ class _StickerDesignState extends State<StickerDesign> {
                 IconButton(
                   //style: getButtonStyle(context),
                   onPressed: () {
-                    setState(() {
+                    if (widget.sticker.quantidade == 0) {
+                    } else {
                       widget.sticker.quantidade--;
-                    });
+                      stickerR.atualizar(widget.sticker);
+                    }
                   },
                   icon: Icon(
                     PhosphorIconsBold.minus,
                     size: 14,
-                    shadows: [Shadow(color: cor.cores[corTema], blurRadius: 2)],
+                    shadows: [
+                      Shadow(
+                          color: cor.cores[corTema]['corDestaque']!,
+                          blurRadius: 2)
+                    ],
                   ),
                 ),
                 Expanded(
@@ -136,9 +137,11 @@ class _StickerDesignState extends State<StickerDesign> {
                 ),
                 IconButton(
                   onPressed: () {
-                    setState(() {
+                    if (widget.sticker.quantidade == 999) {
+                    } else {
                       widget.sticker.quantidade++;
-                    });
+                      stickerR.atualizar(widget.sticker);
+                    }
                   },
                   icon: const Icon(
                     PhosphorIconsBold.plus,
@@ -157,8 +160,10 @@ class _StickerDesignState extends State<StickerDesign> {
   }
 
   cardSemImagem(StickerModel sticker, context) {
-    final captura = CapturarImagem();
+    final captura = CapturarImagem(pasta: 'stickers', prefixo: 'stk');
     final preferencia = Provider.of<Preferencias>(context, listen: false);
+    final stickerR = Provider.of<StickerRepository>(context, listen: true);
+    TextEditingController imagem = TextEditingController();
     return InkWell(
         child: Container(
           decoration: BoxDecoration(
@@ -166,7 +171,7 @@ class _StickerDesignState extends State<StickerDesign> {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               width: 0.1,
-              color: cor.cores[corTema],
+              color: cor.cores[corTema]['corDestaque']!,
             ),
           ),
           child: Padding(
@@ -176,7 +181,7 @@ class _StickerDesignState extends State<StickerDesign> {
               children: [
                 Icon(
                   PhosphorIconsRegular.camera,
-                  color: cor.cores[corTema].withAlpha(60),
+                  color: cor.cores[corTema]['corDestaque']!.withAlpha(60),
                   size: preferencia.getGradeView == 2 ? 90 : 50,
                 ),
                 Positioned(
@@ -185,7 +190,7 @@ class _StickerDesignState extends State<StickerDesign> {
                   child: Text(
                     '${widget.sticker.posicao}',
                     style: TextStyle(
-                      color: cor.cores[corTema].withAlpha(60),
+                      color: cor.cores[corTema]['corDestaque']!.withAlpha(60),
                       fontSize: preferencia.getGradeView == 2 ? 30 : 20,
                       fontWeight: FontWeight.w700,
                     ),
@@ -196,7 +201,10 @@ class _StickerDesignState extends State<StickerDesign> {
           ),
         ),
         onTap: () {
-          captura.opcoesCaptura(context, corTema);
+          captura.opcoesCaptura(
+              context, corTema, null, null, widget.sticker, stickerR);
+          widget.sticker.imagem = imagem.text;
+          stickerR.atualizar(widget.sticker);
         });
   }
 }

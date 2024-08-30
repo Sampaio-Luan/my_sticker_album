@@ -19,13 +19,13 @@ mixin ValidacoesMixin {
     if (formularioKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: corD.cores[cor].withAlpha(200),
+          backgroundColor: corD.cores[cor]['corDestaque']!.withAlpha(200),
 
           content: Text(
             mensagem,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
-              color: Colors.white,
+              color: corD.cores[cor]['corFonte']!,
             ),
           ),
           duration: const Duration(seconds: 2), // Defina o tempo desejado

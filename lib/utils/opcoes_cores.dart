@@ -38,9 +38,9 @@ class _OpcoesCoresState extends State<OpcoesCores> {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: cor.cores[index],
+                  color: cor.cores[index]['corDestaque']!,
                   borderRadius: BorderRadius.circular(5),
-                  boxShadow: [BoxShadow(color: cor.cores[index])],
+                  boxShadow: [BoxShadow(color: cor.cores[index]['corDestaque']!)],
                 ),
                 child: int.parse(widget.controle.text) == index
                     ? Icon(Icons.check,

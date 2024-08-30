@@ -29,7 +29,7 @@ class _StickerFiltroState extends State<StickerFiltro> {
           child: ListTile(
             title: Text(tituloFiltros[0], textAlign: TextAlign.center),
             tileColor: selecionado == tituloFiltros[0]
-                ? cor.cores[widget.album.temaCor].withAlpha(200)
+                ? cor.cores[widget.album.temaCor]['corDestaque']!.withAlpha(200)
                 : null,
             textColor: selecionado == tituloFiltros[0]
                 ? Colors.white
@@ -47,7 +47,7 @@ class _StickerFiltroState extends State<StickerFiltro> {
           child: ListTile(
             title: Text(tituloFiltros[1], textAlign: TextAlign.center),
             tileColor: selecionado == tituloFiltros[1]
-                ? cor.cores[widget.album.temaCor].withAlpha(200)
+                ? cor.cores[widget.album.temaCor]['corDestaque']!.withAlpha(200)
                 : null,
             textColor: selecionado == tituloFiltros[1]
                 ? Colors.white
@@ -64,7 +64,7 @@ class _StickerFiltroState extends State<StickerFiltro> {
           child: ListTile(
             title: Text(tituloFiltros[2], textAlign: TextAlign.center),
             tileColor: selecionado == tituloFiltros[2]
-                ? cor.cores[widget.album.temaCor].withAlpha(200)
+                ? cor.cores[widget.album.temaCor]['corDestaque']!.withAlpha(200)
                 : null,
             textColor: selecionado == tituloFiltros[2]
                 ? Colors.white

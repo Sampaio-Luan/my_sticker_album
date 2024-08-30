@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -18,7 +20,7 @@ class AlbumScreen extends StatefulWidget {
 }
 
 class _AlbumScreenState extends State<AlbumScreen> {
-  final teste = CapturarImagem();
+  final teste = CapturarImagem(pasta : 'album', prefixo: 'capa');
 
   bool isBottomSheet = false;
 
@@ -26,69 +28,62 @@ class _AlbumScreenState extends State<AlbumScreen> {
   Widget build(BuildContext context) {
     final preferencias = context.watch<Preferencias>();
     final albumR = context.watch<AlbumRepository>();
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          backgroundColor: Colors.transparent,
-          title: const Text('Meus Álbuns'),
-          centerTitle: true,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(
-                preferencias.getTema
-                    ? PhosphorIconsRegular.sun
-                    : PhosphorIconsRegular.moon,
-              ),
-              onPressed: () {
-                preferencias.setTema(preferencias.getTema ? false : true);
-              },
+    return Scaffold(
+      appBar: AppBar(
+        //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Colors.transparent,
+        title: const Text('Meus Álbuns'),
+        centerTitle: true,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              preferencias.getTema
+                  ? PhosphorIconsRegular.sun
+                  : PhosphorIconsRegular.moon,
             ),
-          ],
-        ),
-        body: Consumer<AlbumRepository>(builder: (context, albumR, _) {
-          return albumR.getAlbums.isEmpty
-              ? const Center(
-                  child: Text('Nenhum álbum encontrado'),
-                )
-              : GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 5,
-                    childAspectRatio: 2,
-                  ),
-                  itemCount: albumR.getAlbums.length,
-                  itemBuilder: (context, index) {
-                    return AlbumDesign(album: albumR.getAlbums[index]);
-                  },
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                );
-        }),
-       // bottomSheet: albumR.isForm ?  AlbumForm(album: null, albumR: albumR) : null,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // showModalBottomSheet(
-            //     context: context,
-            //     builder: (context) =>
-            //         const AlbumForm(album: null));
-            //albumR.setForm(true);
-            //b.opcoesCores(context, albumR);
-            //teste.opcoesCaptura(context, 1);
-            teste.deletar();
-            //teste.checkFilePermissions();
-            //teste.requestPermissions();
-          },
-          //null,
-
-          //   teste.localPath.then((value) => debugPrint(value));
-          // },
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
-        ), // This trailing comma makes auto-formatting nicer for build methods.
+            onPressed: () {
+              preferencias.setTema(preferencias.getTema ? false : true);
+            },
+          ),
+          IconButton(
+            icon: const Icon(
+              PhosphorIconsRegular.listPlus,
+            ),
+            onPressed: () {
+             albumR.setForm(true);
+            },
+          ),
+        ],
       ),
+      body: Consumer<AlbumRepository>(builder: (context, albumR, _) {
+        return 
+        // albumR.d.isEmpty ? const Center(
+        //   child: Text('Vocé ainda não possui nenhum álbum! ☺️\n Mas pode criar um clicando no botão no canto superior direito!'),
+        // ) : Image.file(File(albumR.d));
+        
+        albumR.getAlbums.isEmpty
+            ? const Center(
+                child: Text(
+                    'Vocé ainda não possui nenhum álbum! ☺️\n Mas pode criar um clicando no botão no canto superior direito!'),
+              )
+            : GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 5,
+                  childAspectRatio: 2,
+                ),
+                itemCount: albumR.getAlbums.length,
+                itemBuilder: (context, index) {
+                  return AlbumDesign(album: albumR.getAlbums[index]);
+                },
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              );
+      }),
+      bottomSheet: albumR.isForm ?  AlbumForm(album: null, albumR: albumR) : null,
+   
     );
   }
 }

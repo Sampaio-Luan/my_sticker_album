@@ -14,9 +14,14 @@ class AlbumRepository extends ChangeNotifier {
   get getAlbums => _albums;
 
   bool isForm = false;
+  bool isEdit = false;
+  AlbumModel? selecionadoAlbumEdit;
 
-  void setForm(bool value) {
-    isForm = value;
+  void setForm(
+      {required bool form, required bool editar, required AlbumModel? album}) {
+    isForm = form;
+    isEdit = editar;
+    selecionadoAlbumEdit = album;
     notifyListeners();
   }
 
@@ -34,7 +39,6 @@ class AlbumRepository extends ChangeNotifier {
   // );
 
   AlbumRepository() {
-    
     if (_albums.isEmpty) {
       recuperar();
     }
@@ -51,6 +55,7 @@ class AlbumRepository extends ChangeNotifier {
 
     for (int i = 0; i < albumsMap.length; i++) {
       _albums.add(AlbumModel.fromMap(albumsMap[i]));
+      debugPrint("🥱👽RPA recuperar() album: ${albumsMap[i]}");
     }
 
     debugPrint("🥱👽RPA recuperar() albums: ${_albums.length}");
@@ -67,6 +72,9 @@ class AlbumRepository extends ChangeNotifier {
       album.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    album.id = id;
+    _albums.add(album);
+
     List<StickerModel> stickers = [];
 
     for (int i = 0; i < album.posicoes; i++) {
@@ -82,16 +90,11 @@ class AlbumRepository extends ChangeNotifier {
     }
     for (int i = 0; i < album.posicoes; i++) {
       await db.insert(
-      kTableNameSticker,
-      stickers[i].toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+        kTableNameSticker,
+        stickers[i].toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
-
-    
-
-    album.id = id;
-    _albums.add(album);
 
     debugPrint("🥱👽RPA criar() id: $id");
 
@@ -132,6 +135,20 @@ class AlbumRepository extends ChangeNotifier {
     _albums.removeWhere((element) => element.id == album.id);
 
     debugPrint("🥱👽RPA excluir() id: ${album.nome}");
+
+    notifyListeners();
+  }
+
+  addOrRemoveSticker(AlbumModel album) {
+    for (int i = 0; i < _albums.length; i++) {
+      if (_albums[i].id == album.id) {
+        _albums[i] = album;
+
+        break;
+      }
+    }
+    debugPrint(
+        "🥱👽RPA addOrRemoveSticker() qtd: ${album.quantidadeFigurinhas}");
 
     notifyListeners();
   }

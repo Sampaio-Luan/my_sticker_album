@@ -18,8 +18,9 @@ class StickerRepository extends ChangeNotifier {
     db = await Banco.instancia.database;
 
     _stickers.clear();
+    stickersInterface.clear();
 
-    notifyListeners();
+    
 
     final List<Map<String, dynamic>> stickersMap = await db.query(
         kTableNameSticker,
@@ -67,6 +68,8 @@ class StickerRepository extends ChangeNotifier {
     for (int i = 0; i < _stickers.length; i++) {
       if (_stickers[i].id == sticker.id) {
         _stickers[i] = sticker;
+        stickersInterface.clear();
+        stickersInterface.addAll(_stickers);
         break;
       }
     }

@@ -32,7 +32,7 @@ class _StickerFiltroState extends State<StickerFiltro> {
                 ? cor.cores[widget.album.temaCor]['corDestaque']!.withAlpha(200)
                 : null,
             textColor: selecionado == tituloFiltros[0]
-                ? Colors.white
+                ? cor.cores[widget.album.temaCor]['corFonte']
                 : null,
             onTap: () {
               stickerR.filtrar(tituloFiltros[0]);
@@ -50,7 +50,7 @@ class _StickerFiltroState extends State<StickerFiltro> {
                 ? cor.cores[widget.album.temaCor]['corDestaque']!.withAlpha(200)
                 : null,
             textColor: selecionado == tituloFiltros[1]
-                ? Colors.white
+                ? cor.cores[widget.album.temaCor]['corFonte']
                 : null,
             onTap: () {
               stickerR.filtrar(tituloFiltros[1]);
@@ -67,7 +67,7 @@ class _StickerFiltroState extends State<StickerFiltro> {
                 ? cor.cores[widget.album.temaCor]['corDestaque']!.withAlpha(200)
                 : null,
             textColor: selecionado == tituloFiltros[2]
-                ? Colors.white
+                ? cor.cores[widget.album.temaCor]['corFonte']
                 : Theme.of(context).colorScheme.onSurface,
             onTap: () {
               stickerR.filtrar(tituloFiltros[2]);

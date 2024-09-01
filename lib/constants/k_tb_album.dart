@@ -27,12 +27,14 @@ CREATE TABLE $kTableNameAlbum (
 const String kQueryAlbum = """
   SELECT
       a.*,
-      COUNT(s.id) AS quantidade_stickers
-  FROM
-      $kTableNameAlbum a
-  LEFT JOIN
-      $kTableNameSticker s ON a.$kTableAlbumColumnId = s.$kTableStickerColumnIdAlbum
-  GROUP BY
-      a.nome;
+       COUNT(s.id) AS qtd_Albuns,
+    SUM(CASE WHEN s.quantidade >= 1 THEN 1 ELSE 0 END) AS $kAlbumQuantidadeFigurinhas
+    
+FROM 
+    $kTableNameAlbum a
+LEFT JOIN 
+    $kTableNameSticker s ON a.$kTableAlbumColumnId = s.$kTableStickerColumnIdAlbum
+GROUP BY 
+      a.$kTableAlbumColumnId;
 
   """;

@@ -20,7 +20,7 @@ class AlbumScreen extends StatefulWidget {
 }
 
 class _AlbumScreenState extends State<AlbumScreen> {
-  final teste = CapturarImagem(pasta : 'album', prefixo: 'capa');
+  final teste = CapturarImagem(pasta: 'album', prefixo: 'capa');
 
   bool isBottomSheet = false;
 
@@ -46,44 +46,70 @@ class _AlbumScreenState extends State<AlbumScreen> {
               preferencias.setTema(preferencias.getTema ? false : true);
             },
           ),
-          IconButton(
-            icon: const Icon(
-              PhosphorIconsRegular.listPlus,
-            ),
-            onPressed: () {
-             albumR.setForm(true);
-            },
-          ),
         ],
       ),
       body: Consumer<AlbumRepository>(builder: (context, albumR, _) {
-        return 
-        // albumR.d.isEmpty ? const Center(
-        //   child: Text('Vocé ainda não possui nenhum álbum! ☺️\n Mas pode criar um clicando no botão no canto superior direito!'),
-        // ) : Image.file(File(albumR.d));
-        
-        albumR.getAlbums.isEmpty
-            ? const Center(
-                child: Text(
-                    'Vocé ainda não possui nenhum álbum! ☺️\n Mas pode criar um clicando no botão no canto superior direito!'),
-              )
-            : GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 5,
-                  childAspectRatio: 2,
+        return Column(
+          children: [
+            albumR.getAlbums.isEmpty
+                ? const Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Text(
+                          'Vocé ainda não possui nenhum álbum! ☺️\n Mas pode criar um tocando em "Criar um álbum"!'),
+                    ),
+                  ),
+                )
+                : Expanded(
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 5,
+                      childAspectRatio: 2,
+                    ),
+                    itemCount: albumR.getAlbums.length,
+                    itemBuilder: (context, index) {
+                      return AlbumDesign(album: albumR.getAlbums[index]);
+                    },
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 5),
+                  ),
                 ),
-                itemCount: albumR.getAlbums.length,
-                itemBuilder: (context, index) {
-                  return AlbumDesign(album: albumR.getAlbums[index]);
-                },
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              );
+            Column(
+              children: [
+                const Divider(
+                  height: 0,
+                ),
+                ListTile(
+                  title: const Text(
+                    'Adicionar um álbum',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: 18,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  onTap: () {
+                    albumR.setForm(
+                      form: true,
+                      editar: false,
+                      album: null,
+                    );
+                  },
+                ),
+              ],
+            )
+          ],
+        );
       }),
-      bottomSheet: albumR.isForm ?  AlbumForm(album: null, albumR: albumR) : null,
-   
+      bottomSheet: albumR.isForm
+          ? AlbumForm(
+              album: albumR.isEdit ? albumR.selecionadoAlbumEdit : null,
+              albumR: albumR)
+          : null,
     );
   }
 }

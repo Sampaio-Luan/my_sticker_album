@@ -16,10 +16,13 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => Preferencias(),
+          create: (context) => Preferencias(AlbumRepository()),
           lazy: false,
         ),
-        ChangeNotifierProvider(create: (context) => AlbumRepository()),
+        ChangeNotifierProvider(
+          create: (context) => AlbumRepository(),
+          lazy: false,
+        ),
         ChangeNotifierProvider(create: (context) => StickerRepository()),
       ],
       child: const MeuApp(),

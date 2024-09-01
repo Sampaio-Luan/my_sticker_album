@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'preferencias.dart';
 import 'screens/album_screen.dart';
+import 'screens/tela_espera.dart';
 import 'themes/theme.dart';
 import 'utils/util.dart';
 
@@ -22,7 +23,7 @@ class MeuApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: preferencias.getTema ? theme.dark() : theme.light(),
-      home: const AlbumScreen(),
+      home:preferencias.carregado ? const AlbumScreen() : const TelaEspera(),
       debugShowCheckedModeBanner: false,
     );
   }

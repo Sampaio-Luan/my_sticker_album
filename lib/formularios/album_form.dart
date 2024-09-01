@@ -62,6 +62,18 @@ class _AlbumFormState extends State<AlbumForm> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    const Divider(height: 0,),
+                    const SizedBox(height: 10),
+                     Text(
+                     widget.album == null ? 'Criar álbum' : 'Editar álbum',
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    const Divider(height: 0,),
+                    const SizedBox(height: 10),
+                     
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 10.0,
@@ -124,7 +136,7 @@ class _AlbumFormState extends State<AlbumForm> {
                                 _descricaoController.clear();
                                 _tituloController.clear();
 
-                                widget.albumR.setForm(false);
+                                widget.albumR.setForm(form: false, editar: false, album: null);
                               },
                               title: const Text(
                                 'Cancelar',
@@ -161,7 +173,7 @@ class _AlbumFormState extends State<AlbumForm> {
                                     );
                                     debugPrint('${a1.toMap()}');
                                     widget.albumR.criar(a1);
-                                    widget.albumR.setForm(false);
+                                    widget.albumR.setForm(form: false, editar: false, album: null);
                                   } else {
                                     _album.nome = _tituloController.text;
                                     _album.descricao =
@@ -179,7 +191,7 @@ class _AlbumFormState extends State<AlbumForm> {
                                   _descricaoController.clear();
                                   _tituloController.clear();
                                   debugPrint('${_album.toMap()}');
-                                  widget.albumR.setForm(false);
+                                  widget.albumR.setForm(form: false, editar: false, album: null);
                                 }
                                 setState(() {
                                   autoValidar = true;

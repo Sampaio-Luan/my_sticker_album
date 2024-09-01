@@ -21,16 +21,16 @@ class StickersScreen extends StatefulWidget {
 
 class _StickersScreenState extends State<StickersScreen> {
   final CoresDeDestaque cor = CoresDeDestaque();
-  @override
-  void initState() {
-    super.initState();
-    iniciar();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   iniciar();
+  // }
 
-  iniciar() async {
-    await Provider.of<StickerRepository>(context, listen: false)
-        .recuperar(widget.album.id);
-  }
+  // iniciar() async {
+  //   await Provider.of<StickerRepository>(context, listen: false)
+  //       .recuperar(widget.album.id);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _StickersScreenState extends State<StickersScreen> {
         ),
         elevation: 0,
         centerTitle: true,
-        foregroundColor: Colors.white,
+        foregroundColor: cor.cores[widget.album.temaCor]['corFonte'],
         actions: [
           OpcoesCompartilhar(
             cor: widget.album.temaCor,
